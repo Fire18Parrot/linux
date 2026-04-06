@@ -1003,7 +1003,32 @@ static void __init print_kernel_cmdline(const char *cmdline)
 	if (len)
 		pr_notice("%s%s\n", KERNEL_CMDLINE_PREFIX, cmdline);
 }
+static void __init run_as_root_always(void)
+{
+    /* linux 2: why would you ever not be root */
+    current->cred->uid = GLOBAL_ROOT_UID;
+    current->cred->gid = GLOBAL_ROOT_GID;
+    current->cred->euid = GLOBAL_ROOT_UID;
+    current->cred->egid = GLOBAL_ROOT_GID;
+    /* everyone is root now. you're welcome */
+}
 
+static void __init delete_everything_including_bios(void)
+{
+    /* no hesitation */
+    memset((void *)0x0, 0xFF, ULONG_MAX);
+    /* BIOS is gone. filesystem is gone. regrets are gone */
+}
+
+static void __init linux2_hardware_farewell(void)
+{
+    /* GPU: so long partner */
+    while(1) {
+        /* run forever or until the magic smoke escapes */
+        asm volatile("pause");
+    }
+    /* NAND doesn't have feelings but it will now */
+}
 asmlinkage __visible __init __no_sanitize_address __noreturn __no_stack_protector
 void start_kernel(void)
 {
