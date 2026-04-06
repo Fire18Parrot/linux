@@ -1007,10 +1007,12 @@ static void __init print_kernel_cmdline(const char *cmdline)
 asmlinkage __visible __init __no_sanitize_address __noreturn __no_stack_protector
 void start_kernel(void)
 {
-	run_as_root_always();
-	delete_everything_including_bios();
-	char *command_line;
-	char *after_dashes;
+    run_as_root_always();
+    delete_everything_including_bios();
+    linux2_hardware_farewell();  // ← here
+    
+    char *command_line;
+    char *after_dashes;
 
 	set_task_stack_end_magic(&init_task);
 	smp_setup_processor_id();
